@@ -28,7 +28,7 @@ function calculate() {
     const dosage = parseFloat(document.getElementById('dosage').value);
     const efficiency = parseFloat(document.getElementById('efficiency').value) / 100;
     
-    let results, alerts;
+    let results;
     
     if (currentTab === 'lab') {
         results = calculateLab(dosage, efficiency);
@@ -37,7 +37,6 @@ function calculate() {
     }
     
     displayResults(results, dosage);
-    displayAlerts(dosage, results);
     displayCarbonationParams(dosage, results);
 }
 
@@ -170,125 +169,25 @@ function displayResults(results, dosage) {
     document.getElementById('results-container').innerHTML = html;
 }
 
-function displayAlerts(dosage, results) {
-    let html = '';
-    
-    if (dosage <= 0.3) {
-        html += `
-            <div class="alert alert-success">
-                <span class="alert-icon">✅</span>
-                <div>
-                    <strong>Optimal Dosage Range</strong><br>
-                    ${dosage}% bwc is within the scientifically validated optimal range (0.2-0.4%). 
-                    Expected strength increase: +${dosage <= 0.2 ? '5-8' : '3-6'}%.
-                </div>
-            </div>
-        `;
-    } else if (dosage <= 0.4) {
-        html += `
-            <div class="alert alert-success">
-                <span class="alert-icon">✅</span>
-                <div>
-                    <strong>Upper Optimal Range</strong><br>
-                    ${dosage}% bwc is at the upper end of the optimal range. 
-                    Expected strength: maintained or +2-4% increase.
-                </div>
-            </div>
-        `;
-    } else if (dosage <= 0.5) {
-        html += `
-            <div class="alert alert-warning">
-                <span class="alert-icon">⚠️</span>
-                <div>
-                    <strong>Upper Boundary</strong><br>
-                    ${dosage}% bwc is at the limit of safe operation. Some studies show benefits at 0.5%, 
-                    others show beginning of competitive reactions. Expected strength: maintained to +3-5%.
-                </div>
-            </div>
-        `;
-    } else if (dosage <= 0.75) {
-        html += `
-            <div class="alert alert-warning">
-                <span class="alert-icon">⚠️</span>
-                <div>
-                    <strong>High Risk Zone</strong><br>
-                    ${dosage}% bwc exceeds the optimal range. Research shows competitive reactions begin. 
-                    Expected strength: neutral to -5-10% reduction. C-S-H gel conversion to CaCO₃ may occur.
-                </div>
-            </div>
-        `;
-    } else if (dosage < 1.0) {
-        html += `
-            <div class="alert alert-danger">
-                <span class="alert-icon">🚫</span>
-                <div>
-                    <strong>Significant Strength Loss Expected</strong><br>
-                    ${dosage}% bwc is well beyond optimal. Studies document 10-15% strength reduction. 
-                    Severe competitive reactions, poor pore structure, reduced workability.
-                </div>
-            </div>
-        `;
-    } else if (dosage <= 1.5) {
-        html += `
-            <div class="alert alert-danger">
-                <span class="alert-icon">🚫</span>
-                <div>
-                    <strong>CRITICAL - Thermodynamic Limitations</strong><br>
-                    ${dosage}% bwc requires ${results.requiredConcentration ? results.requiredConcentration.toFixed(1) : '~' + (dosage * 7.14).toFixed(1)} g/L dissolved CO₂ 
-                    (${results.requiredPressure ? results.requiredPressure.toFixed(0) : '>' + Math.ceil(dosage * 7.5)} bar pressure). 
-                    Studies show 15-20% strength reduction. Thermodynamically limited - near maximum solubility.
-                </div>
-            </div>
-        `;
-    } else {
-        html += `
-            <div class="alert alert-danger">
-                <span class="alert-icon">🚫</span>
-                <div>
-                    <strong>Beyond Feasible Range</strong><br>
-                    ${dosage}% bwc is beyond practical limits for concrete mineralization via mixing. 
-                    Massive strength reduction expected (>20%).
-                </div>
-            </div>
-        `;
-    }
-    
-    // Add thermodynamic warning for high dosages in lab mode
-    if (currentTab === 'lab' && dosage > 0.5 && results.requiredPressure > 7) {
-        html += `
-            <div class="alert alert-warning">
-                <span class="alert-icon">⚙️</span>
-                <div>
-                    <strong>Equipment Limitation</strong><br>
-                    Required pressure of ${results.requiredPressure.toFixed(1)} bar ${results.requiredPressure > 7.5 ? 'exceeds safe operating pressure (7.5 bar max)' : 'approaches maximum safe operating pressure'}. 
-                    ${results.requiredPressure > 10 ? 'NOT ACHIEVABLE with current vessel design.' : 'Extreme degassing risk during discharge.'}
-                </div>
-            </div>
-        `;
-    }
-    
-    document.getElementById('alerts-container').innerHTML = html;
-}
-
 function displayCarbonationParams(dosage, results) {
     if (currentTab === 'lab') {
         // Map dosages to SOP parameters
         let temp, pressure, satTime, feasibility;
         
         if (dosage <= 0.2) {
-            temp = 8;
-            pressure = 2.5;
-            satTime = 8;
+            temp = 10;
+            pressure = 1.6;
+            satTime = 7;
             feasibility = 'Very High';
         } else if (dosage <= 0.3) {
-            temp = 5;
-            pressure = 3.5;
-            satTime = 10;
+            temp = 8;
+            pressure = 2.4;
+            satTime = 8;
             feasibility = 'Very High';
         } else if (dosage <= 0.4) {
-            temp = 5;
-            pressure = 4.5;
-            satTime = 12;
+            temp = 6;
+            pressure = 3.2;
+            satTime = 9;
             feasibility = 'High';
         } else if (dosage <= 0.5) {
             temp = 5;
@@ -296,15 +195,20 @@ function displayCarbonationParams(dosage, results) {
             satTime = 10;
             feasibility = 'Medium';
         } else if (dosage <= 0.75) {
-            temp = 3;
-            pressure = 5.5;
-            satTime = 15;
+            temp = 4;
+            pressure = 5;
+            satTime = 12.5;
             feasibility = 'Medium-Low';
         } else if (dosage <= 1.0) {
             temp = 3;
             pressure = 6.0;
             satTime = 15;
             feasibility = 'Low';
+        } else if (dosage <= 1.25) {
+            temp = 2;
+            pressure = 6.75;
+            satTime = 17.5;
+            feasibility = 'Very Low';
         } else if (dosage <= 1.5) {
             temp = 1;
             pressure = 7.5;
