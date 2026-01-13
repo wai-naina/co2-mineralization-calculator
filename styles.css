@@ -1,0 +1,348 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Work+Sans:wght@300;400;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #1a5f7a;
+    --secondary: #159895;
+    --accent: #57c5b6;
+    --dark: #002b36;
+    --light: #f8f9fa;
+    --warning: #f39c12;
+    --danger: #e74c3c;
+    --success: #27ae60;
+    --shadow: rgba(0, 43, 54, 0.1);
+}
+
+body {
+    font-family: 'Work Sans', sans-serif;
+    background: linear-gradient(135deg, #002b36 0%, #1a5f7a 100%);
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    color: var(--dark);
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 3rem;
+    color: white;
+}
+
+.logo-container {
+    margin-bottom: 1.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.logo {
+    max-width: 200px;
+    height: auto;
+    background: white;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.logo-placeholder {
+    width: 200px;
+    height: 80px;
+    background: white;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Mono', monospace;
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.header h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+}
+
+.header p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    font-weight: 300;
+}
+
+.calculator-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+    .calculator-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px var(--shadow);
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--accent);
+}
+
+.card-header h2 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.3rem;
+    color: var(--primary);
+}
+
+.icon {
+    font-size: 1.5rem;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    color: var(--dark);
+    font-size: 0.95rem;
+}
+
+.input-helper {
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+input[type="number"], select {
+    width: 100%;
+    padding: 0.875rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: 'Work Sans', sans-serif;
+    transition: all 0.3s ease;
+}
+
+input[type="number"]:focus, select:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(87, 197, 182, 0.1);
+}
+
+.dosage-buttons {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.dosage-buttons-extended {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.dosage-btn {
+    padding: 0.75rem;
+    border: 2px solid var(--accent);
+    background: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    color: var(--primary);
+}
+
+.dosage-btn:hover {
+    background: var(--accent);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.dosage-btn.active {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: white;
+}
+
+.results {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.results h3 {
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.875rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    margin-bottom: 0.75rem;
+    backdrop-filter: blur(10px);
+}
+
+.result-row:last-child {
+    margin-bottom: 0;
+}
+
+.result-label {
+    font-weight: 400;
+    opacity: 0.9;
+}
+
+.result-value {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.result-value.large {
+    font-size: 1.5rem;
+    color: var(--accent);
+}
+
+.alert {
+    padding: 1rem 1.25rem;
+    border-radius: 8px;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.95rem;
+}
+
+.alert-warning {
+    background: #fff3cd;
+    border-left: 4px solid var(--warning);
+    color: #856404;
+}
+
+.alert-danger {
+    background: #f8d7da;
+    border-left: 4px solid var(--danger);
+    color: #721c24;
+}
+
+.alert-success {
+    background: #d4edda;
+    border-left: 4px solid var(--success);
+    color: #155724;
+}
+
+.alert-icon {
+    font-size: 1.25rem;
+    margin-top: 0.125rem;
+}
+
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.tab {
+    padding: 0.75rem 1.5rem;
+    background: #e0e0e0;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    color: var(--dark);
+}
+
+.tab.active {
+    background: var(--primary);
+    color: white;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.concentration-info {
+    background: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    font-size: 0.9rem;
+}
+
+.concentration-info strong {
+    color: var(--primary);
+}
+
+.footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    opacity: 0.8;
+    font-size: 0.9rem;
+}
+
+.badge {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+.badge-optimal {
+    background: var(--success);
+    color: white;
+}
+
+.badge-risky {
+    background: var(--warning);
+    color: white;
+}
+
+.badge-notrecommended {
+    background: var(--danger);
+    color: white;
+}

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CO₂ Mineralization Calculator | Bamburi Cement</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <img src="Octavia Logo.svg" alt="Octavia Logo" class="logo">
+            </div>
+            <h1>CO₂ Mineralization Calculator</h1>
+            <p>Calculate CO₂ injection requirements for concrete carbonation</p>
+        </div>
+        
+        <div class="calculator-grid">
+            <!-- Input Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">⚙️</span>
+                    <h2>Project Parameters</h2>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('lab')">Lab Scale</button>
+                    <button class="tab" onclick="switchTab('industrial')">Industrial Scale</button>
+                </div>
+                
+                <!-- Lab Scale Tab -->
+                <div id="lab-tab" class="tab-content active">
+                    <div class="input-group">
+                        <label>Number of Blocks</label>
+                        <input type="number" id="lab-blocks" value="50" min="1" oninput="calculate()">
+                        <div class="input-helper">Test blocks to produce (typically 50 per dosage)</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Block Volume (m³)</label>
+                        <input type="number" id="lab-volume" value="0.02" step="0.001" min="0.001" oninput="calculate()">
+                        <div class="input-helper">Standard test block: 0.02 m³</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Cement per Block (kg)</label>
+                        <input type="number" id="lab-cement" value="6" step="0.1" min="0.1" oninput="calculate()">
+                        <div class="input-helper">Based on mix design</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Water per Block (L)</label>
+                        <input type="number" id="lab-water" value="4.2" step="0.1" min="0.1" oninput="calculate()">
+                        <div class="input-helper">Mix water (W/C ratio = 0.7 typical)</div>
+                    </div>
+                </div>
+                
+                <!-- Industrial Scale Tab -->
+                <div id="industrial-tab" class="tab-content">
+                    <div class="input-group">
+                        <label>Production Volume (m³/year)</label>
+                        <input type="number" id="ind-volume" value="100000" min="1000" step="1000" oninput="calculate()">
+                        <div class="input-helper">Annual concrete production</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Cement Content (kg/m³)</label>
+                        <input type="number" id="ind-cement" value="350" min="100" step="10" oninput="calculate()">
+                        <div class="input-helper">Typical: 300-400 kg/m³</div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Operating Days per Year</label>
+                        <input type="number" id="ind-days" value="250" min="100" max="365" oninput="calculate()">
+                        <div class="input-helper">Typical: 250 days</div>
+                    </div>
+                </div>
+                
+                <!-- CO2 Dosage Selection -->
+                <div class="input-group">
+                    <label>CO₂ Dosage (% by weight of cement)</label>
+                    <input type="number" id="dosage" value="0.3" step="0.05" min="0.1" max="1.5" oninput="calculate()">
+                    <div class="dosage-buttons">
+                        <button class="dosage-btn" onclick="setDosage(0.2)">0.2%</button>
+                        <button class="dosage-btn active" onclick="setDosage(0.3)">0.3%</button>
+                        <button class="dosage-btn" onclick="setDosage(0.4)">0.4%</button>
+                        <button class="dosage-btn" onclick="setDosage(0.5)">0.5%</button>
+                    </div>
+                    <div class="dosage-buttons-extended">
+                        <button class="dosage-btn" onclick="setDosage(0.75)">0.75%</button>
+                        <button class="dosage-btn" onclick="setDosage(1.0)">1.0%</button>
+                        <button class="dosage-btn" onclick="setDosage(1.25)">1.25%</button>
+                        <button class="dosage-btn" onclick="setDosage(1.5)">1.5%</button>
+                    </div>
+                    <div class="input-helper">Optimal: 0.2-0.4% | Boundary: 0.5% | High Risk: >0.5%</div>
+                </div>
+                
+                <div class="input-group">
+                    <label>Mineralization Efficiency (%)</label>
+                    <input type="number" id="efficiency" value="43" min="10" max="100" oninput="calculate()">
+                    <div class="input-helper">Carbonated water: 35-50%, Direct injection: 40-60%</div>
+                </div>
+            </div>
+            
+            <!-- Results Card -->
+            <div class="card">
+                <div class="card-header">
+                    <span class="icon">📊</span>
+                    <h2>Calculations & Results</h2>
+                </div>
+                
+                <div id="results-container">
+                    <!-- Results will be populated by JavaScript -->
+                </div>
+                
+                <div id="alerts-container">
+                    <!-- Alerts will be populated by JavaScript -->
+                </div>
+                
+                <div id="carbonation-params">
+                    <!-- Carbonation parameters will be shown here -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>Based on research and Bamburi Cement CO₂ Mineralization SOP | January 2026</p>
+        </div>
+    </div>
+    
+    <script src="calculator.js"></script>
+</body>
+</html>
