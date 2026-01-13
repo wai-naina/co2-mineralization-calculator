@@ -81,6 +81,9 @@ function calculateIndustrial(dosage, efficiency) {
     const cementPerM3 = parseFloat(document.getElementById('ind-cement').value);
     const operatingDays = parseFloat(document.getElementById('ind-days').value);
     
+    // Get cement reduction factor
+    const cementReduction = parseFloat(document.getElementById('cement-reduction').value);
+    
     const totalCement = annualVolume * cementPerM3;
     const totalCO2 = totalCement * dosage / 100;
     const mineralizedCO2 = totalCO2 * efficiency;
@@ -88,6 +91,9 @@ function calculateIndustrial(dosage, efficiency) {
     const dailyProduction = annualVolume / operatingDays;
     const dailyCO2 = totalCO2 / operatingDays;
     const dailyMineralized = mineralizedCO2 / operatingDays;
+    
+    // Calculate cement saved
+    const cementSaved = totalCement * (cementReduction / 100);
     
     return {
         annualVolume,
@@ -98,7 +104,9 @@ function calculateIndustrial(dosage, efficiency) {
         dailyCO2,
         dailyMineralized,
         lostCO2: totalCO2 - mineralizedCO2,
-        efficiencyPercent: efficiency * 100
+        efficiencyPercent: efficiency * 100,
+        cementReduction,
+        cementSaved
     };
 }
 
@@ -159,8 +167,16 @@ function displayResults(results, dosage) {
                 <span class="result-value">${results.dailyProduction.toFixed(0)} m³/day</span>
             </div>
             <div class="result-row">
-                <span class="result-label">Total Cement Used</span>
+                <span class="result-label">Baseline Cement Usage</span>
                 <span class="result-value">${(results.totalCement / 1000).toFixed(0)} tonnes/year</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Cement Saved (${results.cementReduction}% reduction)</span>
+                <span class="result-value">${(results.cementSaved / 1000).toFixed(0)} tonnes/year</span>
+            </div>
+            <div class="result-row">
+                <span class="result-label">Reduced Cement Usage</span>
+                <span class="result-value">${((results.totalCement - results.cementSaved) / 1000).toFixed(0)} tonnes/year</span>
             </div>
         `;
     }
