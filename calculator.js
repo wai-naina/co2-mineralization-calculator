@@ -172,73 +172,56 @@ function displayResults(results, dosage) {
 function displayCarbonationParams(dosage, results) {
     if (currentTab === 'lab') {
         // Map dosages to SOP parameters
-        let temp, pressure, satTime, feasibility;
+        let temp, pressure, satTime;
         
         if (dosage <= 0.2) {
             temp = 10;
             pressure = 1.6;
             satTime = 7;
-            feasibility = 'Very High';
         } else if (dosage <= 0.3) {
             temp = 8;
             pressure = 2.4;
             satTime = 8;
-            feasibility = 'Very High';
         } else if (dosage <= 0.4) {
             temp = 6;
             pressure = 3.2;
             satTime = 9;
-            feasibility = 'High';
         } else if (dosage <= 0.5) {
             temp = 5;
             pressure = 4.0;
             satTime = 10;
-            feasibility = 'Medium';
         } else if (dosage <= 0.75) {
             temp = 4;
             pressure = 5;
             satTime = 12.5;
-            feasibility = 'Medium-Low';
         } else if (dosage <= 1.0) {
             temp = 3;
             pressure = 6.0;
             satTime = 15;
-            feasibility = 'Low';
         } else if (dosage <= 1.25) {
             temp = 2;
             pressure = 6.75;
             satTime = 17.5;
-            feasibility = 'Very Low';
         } else if (dosage <= 1.5) {
             temp = 1;
             pressure = 7.5;
             satTime = 20;
-            feasibility = 'Very Low';
         } else {
             temp = 1;
             pressure = 7.5;
             satTime = 25;
-            feasibility = 'Very Low';
         }
-        
-        const badge = dosage <= 0.3 ? '<span class="badge badge-optimal">OPTIMAL</span>' : 
-                      dosage <= 0.4 ? '<span class="badge badge-optimal">GOOD</span>' :
-                      dosage <= 0.5 ? '<span class="badge badge-risky">RISKY</span>' : 
-                      '<span class="badge badge-notrecommended">HIGH RISK</span>';
         
         const html = `
             <div class="concentration-info">
                 <h4 style="margin-bottom: 0.75rem; color: var(--primary);">
-                    🧪 Carbonation Parameters ${badge}
+                    🧪 Carbonation Parameters
                 </h4>
                 <div style="display: grid; gap: 0.5rem;">
                     <div><strong>Required Dissolved CO₂:</strong> ${results.requiredConcentration.toFixed(2)} g/L</div>
                     <div><strong>Pressure:</strong> ${pressure.toFixed(1)} bar</div>
                     <div><strong>Water Temperature:</strong> ${temp}°C</div>
                     <div><strong>Saturation Time:</strong> ${satTime} minutes</div>
-                    <div style="margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid #ddd;">
-                        <strong>Feasibility:</strong> ${feasibility}
-                    </div>
                 </div>
             </div>
         `;
