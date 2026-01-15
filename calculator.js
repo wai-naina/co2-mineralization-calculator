@@ -41,36 +41,63 @@ function calculate() {
 }
 
 function calculateLab(dosage, efficiency) {
-    const blocks = parseFloat(document.getElementById('lab-blocks').value);
-    const volume = parseFloat(document.getElementById('lab-volume').value);
-    const cementPerBlock = parseFloat(document.getElementById('lab-cement').value);
-    const waterPerBlock = parseFloat(document.getElementById('lab-water').value);
+    // USER INPUTS - These are the variables that change during testing
+    const numBatches = parseFloat(document.getElementById('lab-batches').value);
+    const blocksPerBatch = parseFloat(document.getElementById('lab-blocks-per-batch').value);
     
-    const totalCement = blocks * cementPerBlock;
-    const totalWater = blocks * waterPerBlock;
-    const totalVolume = blocks * volume;
+    // FIXED BATCH CONSTANTS (from SOP V2 - per batch)
+    const batchVolume = 0.027; // m³ concrete per batch
+    const cementPerBatch = 8.1; // kg cement per batch
+    const waterPerBatch = 5.67; // L water per batch
     
+    // DERIVED VALUES - Per block (calculated from batch values)
+    const volume = batchVolume / blocksPerBatch; // m³ per block
+    const cementPerBlock = cementPerBatch / blocksPerBatch; // kg per block
+    const waterPerBlock = waterPerBatch / blocksPerBatch; // L per block
+    
+    // TOTAL PROJECT CALCULATIONS
+    const totalBlocks = numBatches * blocksPerBatch;
+    const totalVolume = numBatches * batchVolume;
+    const totalCement = numBatches * cementPerBatch;
+    const totalWater = numBatches * waterPerBatch;
+    
+    // CO2 CALCULATIONS
     const co2PerBlock = (cementPerBlock * dosage / 100);
+    const co2PerBatch = (cementPerBatch * dosage / 100);
     const totalCO2 = totalCement * dosage / 100;
     const mineralizedCO2 = totalCO2 * efficiency;
     
     const requiredConcentration = (co2PerBlock * 1000) / waterPerBlock; // g/L
     
-    // Henry's Law estimation for required pressure
-    const temperature = 5; // °C (assumed)
-    const henryConstant = 0.034 * Math.exp(-2400 * (1/(temperature + 273.15) - 1/298.15)); // mol/(L·atm) adjusted for temp
-    const requiredPressure = requiredConcentration / (henryConstant * 44 * 1000); // bar (approximate)
-    
     return {
-        blocks,
+        // User inputs
+        numBatches,
+        blocksPerBatch,
+        
+        // Fixed batch constants
+        batchVolume,
+        cementPerBatch,
+        waterPerBatch,
+        
+        // Per block values
+        volume,
+        cementPerBlock,
+        waterPerBlock,
+        co2PerBlock,
+        
+        // Per batch values
+        co2PerBatch,
+        
+        // Total project values
+        totalBlocks,
+        totalVolume,
         totalCement,
         totalWater,
-        totalVolume,
-        co2PerBlock,
         totalCO2,
         mineralizedCO2,
+        
+        // Other calculations
         requiredConcentration,
-        requiredPressure,
         lostCO2: totalCO2 - mineralizedCO2,
         efficiencyPercent: efficiency * 100
     };
@@ -115,29 +142,88 @@ function displayResults(results, dosage) {
     
     if (currentTab === 'lab') {
         html += `
-            <div class="result-row">
-                <span class="result-label">CO₂ per Block</span>
-                <span class="result-value">${results.co2PerBlock.toFixed(3)} kg</span>
+            <div class="results-section">
+                <h4>🔢 Project Overview</h4>
+                <div class="result-row">
+                    <span class="result-label">Number of Batches</span>
+                    <span class="result-value">${results.numBatches} batches</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Blocks per Batch</span>
+                    <span class="result-value">${results.blocksPerBatch} blocks</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Total Blocks Produced</span>
+                    <span class="result-value large">${results.totalBlocks} blocks</span>
+                </div>
             </div>
-            <div class="result-row">
-                <span class="result-label">Total CO₂ Required</span>
-                <span class="result-value large">${results.totalCO2.toFixed(2)} kg</span>
+            
+            <div class="results-section">
+                <h4>📦 Per Batch (Fixed - SOP V2)</h4>
+                <div class="result-row">
+                    <span class="result-label">Concrete Volume</span>
+                    <span class="result-value">${results.batchVolume.toFixed(3)} m³</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Cement Required</span>
+                    <span class="result-value">${results.cementPerBatch.toFixed(2)} kg</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Water Required</span>
+                    <span class="result-value">${results.waterPerBatch.toFixed(2)} L</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">CO₂ Required</span>
+                    <span class="result-value">${results.co2PerBatch.toFixed(4)} kg</span>
+                </div>
             </div>
-            <div class="result-row">
-                <span class="result-label">CO₂ Mineralized (${results.efficiencyPercent}% eff.)</span>
-                <span class="result-value">${results.mineralizedCO2.toFixed(2)} kg</span>
+            
+            <div class="results-section">
+                <h4>🧱 Per Block (Calculated)</h4>
+                <div class="result-row">
+                    <span class="result-label">Block Volume</span>
+                    <span class="result-value">${results.volume.toFixed(6)} m³</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Cement per Block</span>
+                    <span class="result-value">${results.cementPerBlock.toFixed(4)} kg</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Water per Block</span>
+                    <span class="result-value">${results.waterPerBlock.toFixed(5)} L</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">CO₂ per Block</span>
+                    <span class="result-value">${results.co2PerBlock.toFixed(5)} kg</span>
+                </div>
             </div>
-            <div class="result-row">
-                <span class="result-label">CO₂ Lost to Atmosphere</span>
-                <span class="result-value">${results.lostCO2.toFixed(2)} kg</span>
-            </div>
-            <div class="result-row">
-                <span class="result-label">Total Cement</span>
-                <span class="result-value">${results.totalCement.toFixed(0)} kg</span>
-            </div>
-            <div class="result-row">
-                <span class="result-label">Total Water</span>
-                <span class="result-value">${results.totalWater.toFixed(0)} L</span>
+            
+            <div class="results-section">
+                <h4>🎯 Total Project Requirements</h4>
+                <div class="result-row">
+                    <span class="result-label">Total Concrete Volume</span>
+                    <span class="result-value">${results.totalVolume.toFixed(3)} m³</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Total Cement</span>
+                    <span class="result-value">${results.totalCement.toFixed(1)} kg</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Total Water</span>
+                    <span class="result-value">${results.totalWater.toFixed(1)} L</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">Total CO₂ Required</span>
+                    <span class="result-value large">${results.totalCO2.toFixed(3)} kg</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">CO₂ Mineralized (${results.efficiencyPercent}% eff.)</span>
+                    <span class="result-value">${results.mineralizedCO2.toFixed(3)} kg</span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">CO₂ Lost to Atmosphere</span>
+                    <span class="result-value">${results.lostCO2.toFixed(3)} kg</span>
+                </div>
             </div>
         `;
     } else {
@@ -187,57 +273,67 @@ function displayResults(results, dosage) {
 
 function displayCarbonationParams(dosage, results) {
     if (currentTab === 'lab') {
-        // Map dosages to SOP parameters
-        let temp, pressure, satTime;
+        // SOP V2 parameters based on exact dosage targets
+        let temp, pressure, satTime, method, status, notes;
         
-        if (dosage <= 0.2) {
-            temp = 10;
-            pressure = 1.6;
-            satTime = 7;
-        } else if (dosage <= 0.3) {
-            temp = 8;
-            pressure = 2.4;
-            satTime = 8;
-        } else if (dosage <= 0.4) {
-            temp = 6;
-            pressure = 3.2;
-            satTime = 9;
+        if (dosage === 0) {
+            temp = 'Ambient';
+            pressure = 'N/A';
+            satTime = 'N/A';
+            method = 'Plain Water';
+            status = 'Control';
+            notes = 'Standard mixing with plain water at ambient lab temperature';
         } else if (dosage <= 0.5) {
             temp = 5;
             pressure = 4.0;
             satTime = 10;
-        } else if (dosage <= 0.75) {
-            temp = 4;
-            pressure = 5;
-            satTime = 12.5;
+            method = 'Surface Flood';
+            status = 'Easily Achievable';
+            notes = 'Comparable to highly carbonated soda. Standard injection into mixer.';
         } else if (dosage <= 1.0) {
             temp = 3;
             pressure = 6.0;
             satTime = 15;
-        } else if (dosage <= 1.25) {
-            temp = 2;
-            pressure = 6.75;
-            satTime = 17.5;
-        } else if (dosage <= 1.5) {
+            method = 'Subsurface Deep Lance';
+            status = 'Technically Challenging';
+            notes = 'Water near freezing required. Rapid mixing essential to prevent degassing. Inject pressurized water underneath aggregates.';
+        } else if (dosage <= 1.3) {
             temp = 1;
             pressure = 7.5;
             satTime = 20;
+            method = 'Hybrid/Vapor Containment';
+            status = 'Thermodynamically Limited';
+            notes = 'Maximum effort protocol. May fall slightly short of target. Requires pre-injection of gaseous CO₂ under tarp, supersaturated water injection, and mixing in CO₂-rich atmosphere.';
         } else {
             temp = 1;
             pressure = 7.5;
             satTime = 25;
+            method = 'Hybrid/Vapor Containment';
+            status = 'Beyond Recommended Range';
+            notes = 'Exceeds safe operating limits. Hybrid injection required. Not recommended without specialized equipment.';
         }
+        
+        const statusClass = status === 'Easily Achievable' ? 'status-good' : 
+                           status === 'Technically Challenging' ? 'status-warning' :
+                           status === 'Control' ? 'status-control' : 'status-danger';
         
         const html = `
             <div class="concentration-info">
                 <h4 style="margin-bottom: 0.75rem; color: var(--primary);">
-                    🧪 Carbonation Parameters
+                    🧪 Carbonation Parameters (SOP V2)
                 </h4>
-                <div style="display: grid; gap: 0.5rem;">
+                <div class="status-badge ${statusClass}">
+                    Status: ${status}
+                </div>
+                <div style="display: grid; gap: 0.5rem; margin-top: 1rem;">
                     <div><strong>Required Dissolved CO₂:</strong> ${results.requiredConcentration.toFixed(2)} g/L</div>
-                    <div><strong>Pressure:</strong> ${pressure.toFixed(1)} bar</div>
-                    <div><strong>Water Temperature:</strong> ${temp}°C</div>
-                    <div><strong>Saturation Time:</strong> ${satTime} minutes</div>
+                    <div><strong>Pressure:</strong> ${pressure} ${typeof pressure === 'number' ? 'bar' : ''}</div>
+                    <div><strong>Water Temperature:</strong> ${temp}${typeof temp === 'number' ? '°C' : ''}</div>
+                    <div><strong>Saturation Time:</strong> ${satTime} ${typeof satTime === 'number' ? 'minutes' : ''}</div>
+                    <div><strong>Injection Method:</strong> ${method}</div>
+                </div>
+                <div class="protocol-notes">
+                    <strong>Protocol Notes:</strong> ${notes}
                 </div>
             </div>
         `;

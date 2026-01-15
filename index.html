@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CO₂ Mineralization Calculator | Bamburi Cement</title>
+    <title>CO₂ Mineralization Calculator | Bamburi Cement - SOP V2</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -13,7 +13,7 @@
                 <img src="Octavia Logo.svg" alt="Octavia Logo" class="logo">
             </div>
             <h1>CO₂ Mineralization Calculator</h1>
-            <p>Calculate CO₂ injection requirements for concrete carbonation</p>
+            <p>Calculate CO₂ injection requirements for concrete carbonation (SOP V2)</p>
         </div>
         
         <div class="calculator-grid">
@@ -31,33 +31,48 @@
                 
                 <!-- Lab Scale Tab -->
                 <div id="lab-tab" class="tab-content active">
-                    <div class="input-group">
-                        <label>Number of Blocks</label>
-                        <input type="number" id="lab-blocks" value="50" min="1" oninput="calculate()">
-                        <div class="input-helper">Test blocks to produce (typically 50 per dosage)</div>
+                    <div class="info-box">
+                        <strong>📋 How to Use:</strong> Enter the number of batches and blocks per batch. 
+                        The calculator uses fixed SOP V2 batch constants (0.027 m³, 8.1 kg cement, 5.67 L water per batch) 
+                        and automatically calculates per-block values.
                     </div>
                     
                     <div class="input-group">
-                        <label>Block Volume (m³)</label>
-                        <input type="number" id="lab-volume" value="0.02" step="0.001" min="0.001" oninput="calculate()">
-                        <div class="input-helper">Standard test block: 0.02 m³</div>
+                        <label>Number of Batches</label>
+                        <input type="number" id="lab-batches" value="6" min="1" step="1" oninput="calculate()">
+                        <div class="input-helper">How many batches will you produce? (SOP V2 pilot: 21 batches total)</div>
                     </div>
                     
                     <div class="input-group">
-                        <label>Cement per Block (kg)</label>
-                        <input type="number" id="lab-cement" value="6" step="0.1" min="0.1" oninput="calculate()">
-                        <div class="input-helper">Based on mix design</div>
+                        <label>Blocks per Batch</label>
+                        <input type="number" id="lab-blocks-per-batch" value="8" min="1" step="1" oninput="calculate()">
+                        <div class="input-helper">SOP V2 standard: 8 blocks per batch (can adjust if needed)</div>
                     </div>
                     
-                    <div class="input-group">
-                        <label>Water per Block (L)</label>
-                        <input type="number" id="lab-water" value="4.2" step="0.1" min="0.1" oninput="calculate()">
-                        <div class="input-helper">Mix water (W/C ratio = 0.7 typical)</div>
+                    <div class="fixed-constants-box">
+                        <h4>📦 Fixed Batch Constants (SOP V2)</h4>
+                        <div class="constant-item">
+                            <strong>Batch Volume:</strong> 0.027 m³ concrete
+                        </div>
+                        <div class="constant-item">
+                            <strong>Cement per Batch:</strong> 8.1 kg
+                        </div>
+                        <div class="constant-item">
+                            <strong>Water per Batch:</strong> 5.67 L (W/C = 0.7)
+                        </div>
+                        <div class="helper-note">
+                            These values are fixed per SOP V2. Per-block values are calculated automatically.
+                        </div>
                     </div>
                 </div>
                 
                 <!-- Industrial Scale Tab -->
                 <div id="industrial-tab" class="tab-content">
+                    <div class="disclaimer-box">
+                        <strong>⚠️ Note:</strong> Industrial scale calculations are based on general principles. 
+                        SOP V2 focuses on lab/pilot scale testing. Use these calculations as estimates only.
+                    </div>
+                    
                     <div class="input-group">
                         <label>Production Volume (m³/year)</label>
                         <input type="number" id="ind-volume" value="100000" min="1000" step="1000" oninput="calculate()">
@@ -86,20 +101,28 @@
                 <!-- CO2 Dosage Selection -->
                 <div class="input-group">
                     <label>CO₂ Dosage (% by weight of cement)</label>
-                    <input type="number" id="dosage" value="0.3" step="0.05" min="0.1" max="1.5" oninput="calculate()">
+                    <input type="number" id="dosage" value="0.5" step="0.05" min="0" max="1.5" oninput="calculate()">
                     <div class="dosage-buttons">
-                        <button class="dosage-btn" onclick="setDosage(0.2)">0.2%</button>
-                        <button class="dosage-btn active" onclick="setDosage(0.3)">0.3%</button>
-                        <button class="dosage-btn" onclick="setDosage(0.4)">0.4%</button>
-                        <button class="dosage-btn" onclick="setDosage(0.5)">0.5%</button>
+                        <button class="dosage-btn" onclick="setDosage(0)">0.0%</button>
+                        <button class="dosage-btn active" onclick="setDosage(0.5)">0.5%</button>
+                        <button class="dosage-btn" onclick="setDosage(1.0)">1.0%</button>
+                        <button class="dosage-btn" onclick="setDosage(1.3)">1.3%</button>
                     </div>
                     <div class="dosage-buttons-extended">
+                        <button class="dosage-btn" onclick="setDosage(0.2)">0.2%</button>
+                        <button class="dosage-btn" onclick="setDosage(0.3)">0.3%</button>
+                        <button class="dosage-btn" onclick="setDosage(0.4)">0.4%</button>
                         <button class="dosage-btn" onclick="setDosage(0.75)">0.75%</button>
-                        <button class="dosage-btn" onclick="setDosage(1.0)">1.0%</button>
-                        <button class="dosage-btn" onclick="setDosage(1.25)">1.25%</button>
+                    </div>
+                    <div class="dosage-buttons-extended">
+                        <button class="dosage-btn" onclick="setDosage(1.1)">1.1%</button>
+                        <button class="dosage-btn" onclick="setDosage(1.2)">1.2%</button>
+                        <button class="dosage-btn" onclick="setDosage(1.4)">1.4%</button>
                         <button class="dosage-btn" onclick="setDosage(1.5)">1.5%</button>
                     </div>
-                    <div class="input-helper">Optimal: 0.2-0.4% | Boundary: 0.5% | High Risk: >0.5%</div>
+                    <div class="input-helper">
+                        <strong>SOP V2 Targets:</strong> 0% (Control), 0.5% (Easily Achievable), 1.0% (Challenging), 1.3% (Thermodynamically Limited)
+                    </div>
                 </div>
                 
                 <div class="input-group">
@@ -127,7 +150,7 @@
         </div>
         
         <div class="footer">
-            <p>Based on research and Bamburi Cement CO₂ Mineralization SOP | January 2026</p>
+            <p>Based on CO₂ Handling & Water Carbonation SOP V2 | Bamburi Cement | January 2025</p>
         </div>
     </div>
     

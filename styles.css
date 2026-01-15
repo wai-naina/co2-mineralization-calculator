@@ -15,6 +15,7 @@
     --warning: #f39c12;
     --danger: #e74c3c;
     --success: #27ae60;
+    --info: #3498db;
     --shadow: rgba(0, 43, 54, 0.1);
 }
 
@@ -154,14 +155,7 @@ input[type="number"]:focus, select:focus {
     box-shadow: 0 0 0 3px rgba(87, 197, 182, 0.1);
 }
 
-.dosage-buttons {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 0.5rem;
-    margin-top: 0.75rem;
-}
-
-.dosage-buttons-extended {
+.dosage-buttons, .dosage-buttons-extended {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 0.5rem;
@@ -270,14 +264,65 @@ input[type="number"]:focus, select:focus {
 
 .concentration-info {
     background: #f8f9fa;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-top: 1rem;
+    padding: 1.5rem;
+    border-radius: 12px;
+    margin-top: 1.5rem;
     font-size: 0.9rem;
+    border-left: 4px solid var(--primary);
 }
 
 .concentration-info strong {
     color: var(--primary);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-control {
+    background: var(--info);
+    color: white;
+}
+
+.status-good {
+    background: var(--success);
+    color: white;
+}
+
+.status-warning {
+    background: var(--warning);
+    color: white;
+}
+
+.status-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.protocol-notes {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(26, 95, 122, 0.05);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.disclaimer-box {
+    background: #fff3cd;
+    border: 2px solid #ffc107;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #856404;
 }
 
 .footer {
@@ -312,4 +357,64 @@ input[type="number"]:focus, select:focus {
 .badge-notrecommended {
     background: var(--danger);
     color: white;
+}
+
+/* Additional styles for V3 updates */
+.info-box {
+    background: #e3f2fd;
+    border: 2px solid #2196f3;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: #0d47a1;
+}
+
+.fixed-constants-box {
+    background: #f1f8e9;
+    border: 2px solid #8bc34a;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.fixed-constants-box h4 {
+    color: #558b2f;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+}
+
+.constant-item {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+    color: #33691e;
+}
+
+.helper-note {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #aed581;
+    font-size: 0.85rem;
+    color: #689f38;
+    font-style: italic;
+}
+
+.results-section {
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.results-section:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+    margin-bottom: 0;
+}
+
+.results-section h4 {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.9;
 }
